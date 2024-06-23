@@ -1,0 +1,8 @@
+.vscode
+a.*
+test*
+*.swp
+.editorconfig
+*.dSYM
+**/*.o
+**/*.a
