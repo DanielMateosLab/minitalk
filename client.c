@@ -6,11 +6,11 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/06/23 08:09:41 by damateos         ###   ########.fr       */
+/*   Updated: 2024/06/23 21:33:58 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int main(int argc, char *argv)
+int main()
 {
-
+	return (0);
 }

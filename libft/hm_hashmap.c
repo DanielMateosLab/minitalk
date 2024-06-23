@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 18:04:00 by damateos          #+#    #+#             */
-/*   Updated: 2024/06/09 10:44:55 by damateos         ###   ########.fr       */
+/*   Updated: 2024/06/23 21:36:12 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_hm_node	*hm_insert(
 	unsigned int	index;
 	t_hm_node		*new_node;
 
-	index = hash(key) % map->size;
+	index = hm_hash(key) % map->size;
 	new_node = (t_hm_node *)malloc(sizeof(t_hm_node));
 	if (!new_node)
 		return (NULL);

@@ -6,3 +6,5 @@ test*
 *.dSYM
 **/*.o
 **/*.a
+client
+server

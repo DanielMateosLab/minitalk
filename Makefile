@@ -29,3 +29,6 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re libft
+
+debug: CFLAGS += -g3 -fsanitize=address
+debug: re
