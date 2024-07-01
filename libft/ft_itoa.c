@@ -6,13 +6,13 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:23:06 by damateos          #+#    #+#             */
-/*   Updated: 2024/01/21 18:33:54 by damateos         ###   ########.fr       */
+/*   Updated: 2024/06/29 16:05:58 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t static	get_size(int n)
+static size_t	get_size(int n)
 {
 	size_t	size;
 
@@ -27,7 +27,7 @@ size_t static	get_size(int n)
 	return (size);
 }
 
-void static	handle_min(char *res, int *n, size_t *i)
+static void	handle_min(char *res, int *n, size_t *i)
 {
 	if (*n == -2147483648)
 	{
@@ -37,7 +37,7 @@ void static	handle_min(char *res, int *n, size_t *i)
 	}
 }
 
-void static	handle_negative(char *res, int *n)
+static void	handle_negative(char *res, int *n)
 {
 	if (*n < 0)
 	{

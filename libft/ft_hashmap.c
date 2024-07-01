@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hm_hashmap.c                                       :+:      :+:    :+:   */
+/*   ft_hashmap.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 18:04:00 by damateos          #+#    #+#             */
-/*   Updated: 2024/06/23 21:36:12 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/01 22:18:50 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Typical max size of unsigned int: 2^32 4.294.967.295 or 4mb
 // Algo of my namesake djb2 (Daniel J. Bernstein)
 
-unsigned int	hm_hash(const char *string)
+unsigned int	ft_hash(const char *string)
 {
 	const unsigned char	*u_str;
 	unsigned int		hash;
@@ -27,32 +27,40 @@ unsigned int	hm_hash(const char *string)
 	return (hash);
 }
 
-// TODO: Create free utility to set freed value to NULL and return NULL
-t_hm_node	*hm_insert(
-	t_hm_hashmap *map, const char *key, void *value, size_t value_size)
+t_hashmap	*ft_hm_create(size_t size)
 {
-	unsigned int	index;
-	t_hm_node		*new_node;
+	t_hashmap	*hm;
 
-	index = hm_hash(key) % map->size;
-	new_node = (t_hm_node *)malloc(sizeof(t_hm_node));
-	if (!new_node)
+	hm = (t_hashmap *)malloc(sizeof(t_hashmap));
+	if (!hm)
 		return (NULL);
-	new_node->key = ft_strdup(key);
-	if (!new_node->key)
+	hm->array = ft_calloc(size, sizeof(void *));
+	if (!hm->array)
+		return (ft_free((void **)hm));
+	hm->size = size;
+	return (hm);
+}
+
+void	ft_hm_remove(t_hashmap *hm)
+{
+	size_t		i;
+	t_hm_node	*node;
+	t_hm_node	*temp;
+
+	i = 0;
+	while (i < hm->size)
 	{
-		free(new_node);
-		return (NULL);
+		node = hm->array[i];
+		while (node)
+		{
+			temp = node;
+			node = temp->next;
+			ft_free((void **)&temp->key);
+			ft_free((void **)&temp->value);
+			ft_free((void **)&temp);
+		}
+		i++;
 	}
-	new_node->value = malloc(value_size);
-	if (!new_node->value)
-	{
-		free(new_node->key);
-		free(new_node);
-		return (NULL);
-	}
-	ft_memcpy(new_node->value, value, value_size);
-	new_node->next = map->array[index];
-	map->array[index] = new_node;
-	return (new_node);
+	ft_free((void **)&hm->array);
+	ft_free((void **)&hm);
 }

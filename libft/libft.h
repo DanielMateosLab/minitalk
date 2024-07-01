@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 20:08:06 by damateos          #+#    #+#             */
-/*   Updated: 2024/06/09 10:16:17 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/01 21:30:36 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char *s, int fd);
 void			ft_putendl_fd(char *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
+void			*ft_free(void **ptr);
 
 typedef struct s_list
 {
@@ -75,15 +76,24 @@ typedef struct s_hm_node
 {
 	char				*key;
 	void				*value;
-	struct s_hm_node		*next;
+	struct s_hm_node	*next;
 }	t_hm_node;
 
-typedef struct s_hm_hashmap
+typedef struct s_hashmap
 {
 	t_hm_node	**array;
-	size_t	size;
-}	t_hm_hashmap;
+	size_t		size;
+}	t_hashmap;
 
-unsigned int	hm_hash(const char *string);
+unsigned int	ft_hash(const char *string);
+t_hashmap		*ft_hm_create(size_t size);
+t_hm_node		*ft_hm_node_insert(
+					t_hashmap *map,
+					const char *key,
+					void *value,
+					size_t value_size);
+void			ft_hm_node_remove(t_hashmap *hm, const char *key);
+void			*ft_hm_get(t_hashmap *hm, const char *key);
+void			ft_hm_remove(t_hashmap *hm);
 
 #endif
