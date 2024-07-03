@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/03 21:09:48 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/03 21:30:09 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,10 @@ int	main(void)
 	if (!buff.ptr)
 		return (1);
 	ft_memset(&sa, 0, sizeof(sa));
-	ft_memset(&g_message, 0, sizeof(g_message));
+	g_message = (t_message *)malloc(sizeof(t_message));
+	if (!g_message)
+		return (1);
+	ft_memset((void *)g_message, 0, sizeof(t_message));
 	sa.sa_sigaction = action;
 	sa.sa_flags = SA_SIGINFO;
 	pid = ft_itoa((int)getpid());
