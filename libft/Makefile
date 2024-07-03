@@ -33,5 +33,8 @@ fclean: clean
 
 re: fclean all
 
-test: all
-	$(CC) $(CFLAGS) main.c $(NAME) -o test
+deb: fclean
+	$(CC) $(CFLAGS) -g -fsanitize=address main.c $(NAME) -o test
+
+leaks: fclean
+	$(CC) $(CFLAGS) -g main.c $(NAME) -o test
