@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/01 23:27:34 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/03 21:09:48 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,11 @@ int	process_message(t_buffer *buff)
 int	main(void)
 {
 	struct sigaction	sa;
-	t_buffer			*buff;
+	t_buffer			buff;
 	char				*pid;
 
-	init_str_state(buff);
-	if (!buff->ptr)
+	init_str_state(&buff);
+	if (!buff.ptr)
 		return (1);
 	ft_memset(&sa, 0, sizeof(sa));
 	ft_memset(&g_message, 0, sizeof(g_message));
@@ -132,7 +132,7 @@ int	main(void)
 	{
 		if (g_message->pending)
 		{
-			if (process_message(buff) == 1)
+			if (process_message(&buff) == 1)
 				return (1);
 		}
 		pause();
