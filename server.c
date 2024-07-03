@@ -6,26 +6,11 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/03 21:30:09 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:03:14 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-typedef struct s_message
-{
-	pid_t	sender;
-	int		bit;
-	int		pending;
-}	t_message;
-
-typedef struct s_buffer
-{
-	char	*ptr;
-	int		len;
-	int		si;
-	int		bi;
-} 	t_buffer;
 
 volatile t_message	*g_message;
 
