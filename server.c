@@ -6,13 +6,13 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/03 22:03:14 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:41:33 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-volatile t_message	*g_message;
+volatile t_message	*g_message = NULL;
 
 void	action(int sig, siginfo_t *info, void *context)
 {
@@ -113,6 +113,9 @@ int	main(void)
 	ft_memset((void *)g_message, 0, sizeof(t_message));
 	sa.sa_sigaction = action;
 	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	pid = ft_itoa((int)getpid());
 	write(1, pid, ft_strlen(pid));
 	ft_putchar_fd('\n', 1);
