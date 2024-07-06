@@ -6,11 +6,12 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/03 22:41:33 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/06 13:36:41 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+#include <signal.h>
 
 volatile t_message	*g_message = NULL;
 
@@ -89,9 +90,10 @@ int	process_message(t_buffer *buff)
 		buff->bi++;
 	if (buff->si == buff->len - 1)
 	{
-		ft_expand_str(&buff->ptr, buff->len, (buff->len *= 2));
+		ft_expand_str(&buff->ptr, buff->len, buff->len * 2);
 		if (!buff->ptr)
 			return (1);
+		buff->len *= 2;
 	}
 	kill(g_message->sender, SIGUSR1);
 	return (0);
@@ -106,11 +108,11 @@ int	main(void)
 	init_str_state(&buff);
 	if (!buff.ptr)
 		return (1);
-	ft_memset(&sa, 0, sizeof(sa));
+	ft_bzero(&sa, sizeof(sa));
 	g_message = (t_message *)malloc(sizeof(t_message));
 	if (!g_message)
 		return (1);
-	ft_memset((void *)g_message, 0, sizeof(t_message));
+	ft_bzero((void *)g_message, sizeof(t_message));
 	sa.sa_sigaction = action;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
