@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/06 13:36:41 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/06 15:13:33 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ int	main(void)
 {
 	struct sigaction	sa;
 	t_buffer			buff;
-	char				*pid;
 
 	init_str_state(&buff);
 	if (!buff.ptr)
@@ -118,9 +117,7 @@ int	main(void)
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	pid = ft_itoa((int)getpid());
-	write(1, pid, ft_strlen(pid));
-	ft_putchar_fd('\n', 1);
+	ft_printf("%s\n", ft_itoa((int)getpid()));
 	while (1)
 	{
 		if (g_message->pending)

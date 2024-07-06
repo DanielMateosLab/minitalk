@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 21:43:13 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/06 13:42:53 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:21:23 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define MINITALK_H
 
 # define _GNU_SOURCE
-# include "libft/libft.h"
+
+# include "libft/include/libft.h"
 # include <unistd.h>
 # include <signal.h>
 
