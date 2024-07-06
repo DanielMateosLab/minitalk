@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/06 18:38:45 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/06 18:48:39 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,6 @@ void	handler(int signal)
 	if (signal != SIGUSR1)
 		return ;
 	received = 1;
-	// g_state->received = 1;
-	// g_state->bi = g_state->bi + 1;
-	// if (g_state->bi == 8)
-	// {
-	// 	g_state->bi = 0;
-	// 	g_state->si = g_state->si + 1;
-	// 	ft_printf("\n");
-	// }
 }
 
 int	main(int argc, char	**argv)
@@ -41,7 +33,7 @@ int	main(int argc, char	**argv)
 		return (1);
 	str = argv[2];
 	si = 0;
-	bi = 9;
+	bi = 8;
 	sa.sa_handler = handler;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
@@ -51,9 +43,9 @@ int	main(int argc, char	**argv)
 		if (received)
 		{
 			bi--;
-			if (bi == 0)
+			if (bi > 7)
 			{
-				bi = 8;
+				bi = 7;
 				si++;
 				ft_printf("\n");
 			}
