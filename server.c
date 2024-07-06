@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/06 15:13:33 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/06 18:33:56 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,21 @@ void	print_str_and_reset_state(t_buffer *buff)
 int	process_message(t_buffer *buff)
 {
 	if (g_message->bit)
+	{
+		ft_printf("1");
 		buff->ptr[buff->si] |= (1 << buff->bi);
+	}
 	else
+	{
+		ft_printf("0");
 		buff->ptr[buff->si] &= ~(1 << buff->bi);
+	}
 	if (buff->bi == 7)
 	{
+		ft_printf("\n");
 		if (!buff->ptr[buff->si])
 		{
+			ft_printf("message end\n");
 			print_str_and_reset_state(buff);
 			if (!buff->ptr)
 				return (1);
@@ -95,6 +103,7 @@ int	process_message(t_buffer *buff)
 			return (1);
 		buff->len *= 2;
 	}
+	g_message->pending = 0;
 	kill(g_message->sender, SIGUSR1);
 	return (0);
 }
