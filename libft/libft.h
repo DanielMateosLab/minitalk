@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 20:08:06 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/01 21:30:36 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/06 15:01:25 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <unistd.h>
+# include "printf/ft_printf.h"
 
 int				ft_isalnum(int c);
 int				ft_isalpha(int c);
