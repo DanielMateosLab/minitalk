@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/06 18:33:56 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/06 23:09:41 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_expand_str(char **str, size_t len, size_t new_len)
 void	init_str_state(struct s_buffer *buff)
 {
 	buff->len = 1024;
-	buff->bi = 0;
+	buff->bi = 7;
 	buff->si = 0;
 	buff->ptr = (char *)ft_calloc(buff->len, sizeof(char));
 }
@@ -78,12 +78,11 @@ int	process_message(t_buffer *buff)
 		ft_printf("0");
 		buff->ptr[buff->si] &= ~(1 << buff->bi);
 	}
-	if (buff->bi == 7)
+	if (buff->bi == 0)
 	{
 		ft_printf("\n");
 		if (!buff->ptr[buff->si])
 		{
-			ft_printf("message end\n");
 			print_str_and_reset_state(buff);
 			if (!buff->ptr)
 				return (1);
@@ -91,17 +90,21 @@ int	process_message(t_buffer *buff)
 		else
 		{
 			buff->si++;
-			buff->bi = 0;
+			buff->bi = 7;
 		}
 	}
 	else
-		buff->bi++;
+		buff->bi--;
 	if (buff->si == buff->len - 1)
 	{
+		ft_printf(
+			"buffer full, expanding it. Curr len: %s\n",
+			ft_itoa((int)buff->len));
 		ft_expand_str(&buff->ptr, buff->len, buff->len * 2);
 		if (!buff->ptr)
 			return (1);
 		buff->len *= 2;
+		ft_printf("buff new len: %s\n", ft_itoa((int)buff->len));
 	}
 	g_message->pending = 0;
 	kill(g_message->sender, SIGUSR1);
