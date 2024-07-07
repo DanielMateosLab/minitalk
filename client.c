@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/07 00:13:29 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:45:26 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	main(int argc, char	**argv)
 	char				*str;
 	size_t				bi;
 	size_t				si;
-	int					failed;
+	int					signal;
+	int					sleep_time;
 
 	if (argc != 3)
 		return (1);
@@ -39,6 +40,7 @@ int	main(int argc, char	**argv)
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
 	len = ft_strlen(str);
+	sleep_time = 1000;
 	while (1)
 	{
 		if (received)
@@ -52,34 +54,26 @@ int	main(int argc, char	**argv)
 			}
 			if (si > len)
 				return (0);
-			received = 0;
 			if (str[si] >> bi & 1)
 			{
 				ft_printf("1");
-				while (!received && !failed)
-				{
-					failed = kill(ft_atoi(argv[1]), SIGUSR2) == -1;
-					if (failed)
-					{
-						ft_printf("Signal sending failed");
-						return (1);
-					}
-					usleep(300);
-				}
+				signal = SIGUSR2;
 			}
 			else
 			{
 				ft_printf("0");
-				while (!received && !failed)
+				signal = SIGUSR1;
+			}
+			received = 0;
+			while (!received)
+			{
+				if (kill(ft_atoi(argv[1]), signal) == -1)
 				{
-					failed = kill(ft_atoi(argv[1]), SIGUSR1) == -1;
-					if (failed)
-					{
-						ft_printf("Signal sending failed");
-						return (1);
-					}
-					usleep(300);
+					ft_printf("Signal sending failed");
+					return (1);
 				}
+				sleep_time = (sleep_time * 2) % 300000;
+				usleep(sleep_time);
 			}
 		}
 	}
