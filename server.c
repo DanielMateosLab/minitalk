@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/06 23:59:50 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/07 00:13:47 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	process_message(t_buffer *buff)
 		ft_printf("buff new len: %s\n", ft_itoa((int)buff->len));
 	}
 	g_message->pending = 0;
-	// TODO: block signals while receiving? move sync and signal-safe logic to
+	// TODO 1: fix expand str
 	while (!g_message->pending && !failed)
 	{
 		failed = kill(g_message->sender, SIGUSR1) == -1;

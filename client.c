@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/07 00:04:10 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/07 00:13:29 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ int	main(int argc, char	**argv)
 				{
 					failed = kill(ft_atoi(argv[1]), SIGUSR2) == -1;
 					if (failed)
+					{
 						ft_printf("Signal sending failed");
+						return (1);
+					}
 					usleep(300);
 				}
 			}
@@ -71,7 +74,10 @@ int	main(int argc, char	**argv)
 				{
 					failed = kill(ft_atoi(argv[1]), SIGUSR1) == -1;
 					if (failed)
+					{
 						ft_printf("Signal sending failed");
+						return (1);
+					}
 					usleep(300);
 				}
 			}
