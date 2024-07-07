@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/07 18:45:26 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/07 20:40:08 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,7 @@ int	main(int argc, char	**argv)
 			while (!received)
 			{
 				if (kill(ft_atoi(argv[1]), signal) == -1)
-				{
-					ft_printf("Signal sending failed");
 					return (1);
-				}
 				sleep_time = (sleep_time * 2) % 300000;
 				usleep(sleep_time);
 			}

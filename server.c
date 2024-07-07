@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/07 19:21:52 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/07 20:41:41 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,18 @@ void	action(int sig, siginfo_t *info, void *context)
 	return ;
 }
 
+void	set_up_sigaction(void)
+{
+	struct sigaction	sa;
+
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_sigaction = action;
+	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+}
+
 char	*ft_expand_str(char *str, size_t len, size_t new_len)
 {
 	char	*temp;
@@ -47,44 +59,17 @@ char	*ft_expand_str(char *str, size_t len, size_t new_len)
 	return (temp);
 }
 
-void	init_str_state(struct s_buffer *buff)
-{
-	buff->len = 3;
-	buff->bi = 7;
-	buff->si = 0;
-	buff->ptr = (char *)ft_calloc(buff->len, sizeof(char));
-}
-
-void	print_str_and_reset_state(t_buffer *buff)
-{
-	write(1, buff->ptr, ft_strlen(buff->ptr));
-	ft_free((void **)&buff->ptr);
-	init_str_state(buff);
-	g_message->pending = 0;	
-}
-
-void	save_bit(t_buffer *buff)
-{
-	if (g_message->bit)
-	{
-		ft_printf("1");
-		buff->ptr[buff->si] |= (1 << buff->bi);
-	}
-	else
-	{
-		ft_printf("0");
-		buff->ptr[buff->si] &= ~(1 << buff->bi);
-	}
-}
-
 void	process_message(t_buffer *buff)
 {
-	save_bit(buff);
+	if (g_message->bit)
+		buff->ptr[buff->si] |= (1 << buff->bi);
+	else
+		buff->ptr[buff->si] &= ~(1 << buff->bi);
 	if (buff->bi == 0)
 	{
 		if (!buff->ptr[buff->si])
 		{
-			print_str_and_reset_state(buff);
+			print_str_and_reset_state(buff, g_message);
 			return ;
 		}
 		else
@@ -102,23 +87,8 @@ void	process_message(t_buffer *buff)
 	}
 }
 
-void	send_confirmation(void)
-{
-	int	sleep_time;
-
-	sleep_time = 1000;
-	g_message->pending = 0;
-	while (!g_message->pending)
-	{
-		kill(g_message->sender, SIGUSR1);
-		sleep_time = sleep_time * 2;
-		usleep(sleep_time);
-	}
-}
-
 int	main(void)
 {
-	struct sigaction	sa;
 	t_buffer			buff;
 
 	init_str_state(&buff);
@@ -127,13 +97,8 @@ int	main(void)
 	g_message = (t_message *)malloc(sizeof(t_message));
 	if (!g_message)
 		return (1);
-	ft_bzero(&sa, sizeof(sa));
 	ft_bzero((void *)g_message, sizeof(t_message));
-	sa.sa_sigaction = action;
-	sa.sa_flags = SA_SIGINFO;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGUSR1, &sa, NULL);
-	sigaction(SIGUSR2, &sa, NULL);
+	set_up_sigaction();
 	ft_printf("%s\n", ft_itoa((int)getpid()));
 	while (1)
 	{
@@ -142,7 +107,7 @@ int	main(void)
 			process_message(&buff);
 			if (!buff.ptr)
 				return (1);
-			send_confirmation();
+			send_confirmation(g_message);
 		}
 	}
 	return (0);
