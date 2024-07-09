@@ -6,19 +6,19 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 22:17:48 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:58:05 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-volatile sig_atomic_t	received = 1;
+volatile sig_atomic_t	g_received = 1;
 
 void	handler(int signal)
 {
 	if (signal != SIGUSR1)
 		return ;
-	received = 1;
+	g_received = 1;
 }
 
 void	set_up_sigaction(struct sigaction *sa)
@@ -31,7 +31,7 @@ void	set_up_sigaction(struct sigaction *sa)
 
 int	send_signal(char *pid, int signal)
 {
-	received = 0;
+	g_received = 0;
 	if (kill(ft_atoi(pid), signal) == -1)
 		return (-1);
 	return (0);
@@ -39,7 +39,6 @@ int	send_signal(char *pid, int signal)
 
 int	next_bit(size_t *si, size_t *bi, size_t len)
 {
-
 	(*bi)--;
 	if (*bi > 7)
 	{
@@ -59,7 +58,6 @@ int	main(int argc, char	**argv)
 	size_t				si;
 	struct sigaction	sa;
 
-
 	if (argc != 3)
 		return (1);
 	set_up_sigaction(&sa);
@@ -69,7 +67,7 @@ int	main(int argc, char	**argv)
 	len = ft_strlen(str);
 	while (1)
 	{
-		if (received)
+		if (g_received)
 		{
 			if (!next_bit(&si, &bi, len))
 				return (0);

@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 20:20:00 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 22:24:44 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:51:20 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,11 @@ char	*init_str_state(t_buffer *buff)
 	return (buff->ptr);
 }
 
-void	print_str_and_reset_state(t_buffer *buff, volatile t_message *g_message)
+void	print_str_and_reset_state(t_buffer *buff)
 {
 	write(1, buff->ptr, ft_strlen(buff->ptr));
 	ft_free((void **)&buff->ptr);
 	init_str_state(buff);
-	g_message->pending = 0;
 }
 
 void	send_confirmation(volatile t_message *g_message)

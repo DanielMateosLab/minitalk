@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 22:25:08 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:54:00 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	process_message(t_buffer *buff)
 	{
 		if (!buff->ptr[buff->si])
 		{
-			print_str_and_reset_state(buff, g_message);
+			print_str_and_reset_state(buff);
 			return ;
 		}
 		else
@@ -69,18 +69,23 @@ void	process_message(t_buffer *buff)
 	}
 }
 
+volatile t_message	*init_g_message(void)
+{
+	g_message = (t_message *)malloc(sizeof(t_message));
+	if (!g_message)
+		return (NULL);
+	ft_bzero((void *)g_message, sizeof(t_message));
+	return (g_message);
+}
+
 int	main(void)
 {
 	t_buffer			buff;
 	sigset_t			usr_set;
 
 	usr_set = usr_sigset();
-	if (!init_str_state(&buff))
+	if (!init_str_state(&buff) || !init_g_message())
 		return (1);
-	g_message = (t_message *)malloc(sizeof(t_message));
-	if (!g_message)
-		return (1);
-	ft_bzero((void *)g_message, sizeof(t_message));
 	set_up_sigaction();
 	ft_printf("%s\n", ft_itoa((int)getpid()));
 	while (1)
