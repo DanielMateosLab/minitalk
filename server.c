@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/07 20:41:41 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 21:02:40 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	set_up_sigaction(void)
 	ft_bzero(&sa, sizeof(sa));
 	sa.sa_sigaction = action;
 	sa.sa_flags = SA_SIGINFO;
-	sigemptyset(&sa.sa_mask);
+	sa.sa_mask = usr_sigset();
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 }
@@ -90,7 +90,9 @@ void	process_message(t_buffer *buff)
 int	main(void)
 {
 	t_buffer			buff;
+	sigset_t			usr_set;
 
+	usr_set = usr_sigset();
 	init_str_state(&buff);
 	if (!buff.ptr)
 		return (1);
@@ -104,9 +106,11 @@ int	main(void)
 	{
 		if (g_message->pending)
 		{
+			sigprocmask(SIG_BLOCK, &usr_set, NULL);
 			process_message(&buff);
 			if (!buff.ptr)
 				return (1);
+			sigprocmask(SIG_UNBLOCK, &usr_set, NULL);
 			send_confirmation(g_message);
 		}
 	}

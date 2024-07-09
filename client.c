@@ -6,13 +6,13 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/07 22:27:40 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 21:01:08 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-volatile int	received = 1;
+volatile sig_atomic_t	received = 1;
 
 void	handler(int signal)
 {
@@ -20,10 +20,20 @@ void	handler(int signal)
 		return ;
 	received = 1;
 }
+
+sigset_t	usr1_sigset(void)
+{
+	sigset_t	set;
+
+	sigemptyset(&set);
+	sigaddset(&set, SIGUSR1);
+	return (set);
+}
+
 void	set_up_sigaction(struct sigaction *sa)
 {
 	sa->sa_handler = handler;
-	sigemptyset(&sa->sa_mask);
+	sa->sa_mask = usr1_sigset();
 	sigaction(SIGUSR1, sa, NULL);
 }
 
@@ -31,13 +41,16 @@ int	send_signal(char *pid, int signal)
 {
 	int					sleep_time;
 
-	sleep_time = 1000;
+	sleep_time = 500000;
 	received = 0;
 	while (!received)
 	{
 		if (kill(ft_atoi(pid), signal) == -1)
+		{
+			ft_printf("sending failure");
 			return (1);
-		sleep_time = (sleep_time * 2) % 300000;
+		}
+		// sleep_time = (sleep_time * 2) % 300000;
 		usleep(sleep_time);
 	}
 	return (0);
