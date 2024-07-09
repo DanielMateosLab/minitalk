@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 21:01:08 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:17:48 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,42 +21,23 @@ void	handler(int signal)
 	received = 1;
 }
 
-sigset_t	usr1_sigset(void)
-{
-	sigset_t	set;
-
-	sigemptyset(&set);
-	sigaddset(&set, SIGUSR1);
-	return (set);
-}
-
 void	set_up_sigaction(struct sigaction *sa)
 {
 	sa->sa_handler = handler;
-	sa->sa_mask = usr1_sigset();
+	sigemptyset(&sa->sa_mask);
+	sigaddset(&sa->sa_mask, SIGUSR1);
 	sigaction(SIGUSR1, sa, NULL);
 }
 
 int	send_signal(char *pid, int signal)
 {
-	int					sleep_time;
-
-	sleep_time = 500000;
 	received = 0;
-	while (!received)
-	{
-		if (kill(ft_atoi(pid), signal) == -1)
-		{
-			ft_printf("sending failure");
-			return (1);
-		}
-		// sleep_time = (sleep_time * 2) % 300000;
-		usleep(sleep_time);
-	}
+	if (kill(ft_atoi(pid), signal) == -1)
+		return (-1);
 	return (0);
 }
 
-int	to_next_bit(size_t *si, size_t *bi, size_t len)
+int	next_bit(size_t *si, size_t *bi, size_t len)
 {
 
 	(*bi)--;
@@ -68,14 +49,6 @@ int	to_next_bit(size_t *si, size_t *bi, size_t len)
 	if (*si > len)
 		return (0);
 	return (1);
-}
-
-int	bit_to_signal(size_t si, size_t bi, char *str)
-{
-	if (str[si] >> bi & 1)
-		return (SIGUSR2);
-	else
-		return (SIGUSR1);
 }
 
 int	main(int argc, char	**argv)
@@ -98,7 +71,7 @@ int	main(int argc, char	**argv)
 	{
 		if (received)
 		{
-			if (!to_next_bit(&si, &bi, len))
+			if (!next_bit(&si, &bi, len))
 				return (0);
 			if (send_signal(argv[1], bit_to_signal(si, bi, str)) == 1)
 				return (1);
@@ -107,4 +80,8 @@ int	main(int argc, char	**argv)
 	return (0);
 }
 
-// while true; do ./client 142940 "$(date +%s%3N)"; usleep 10000; date +%s%3N; done
+/*
+To test:
+ while true; do ./client $PID  "$(cat ~/lorem-ipsum.txt)$(date +%s%3N)";
+ sleep 0.1; date +%s%3N; done
+*/

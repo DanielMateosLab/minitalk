@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 21:43:13 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 20:35:53 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:15:30 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ void		print_str_and_reset_state(
 				t_buffer *buff, volatile t_message *g_message);
 void		send_confirmation(volatile t_message *g_message);
 sigset_t	usr_sigset(void);
+int			bit_to_signal(size_t si, size_t bi, char *str);
 
 #endif

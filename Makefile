@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-C_SRCS = client.c
+C_SRCS = client.c client_utils.c
 C_OBJS = $(C_SRCS:.c=.o)
 
 S_SRCS = server.c server_utils.c
