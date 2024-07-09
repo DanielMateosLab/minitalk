@@ -1,2 +1,0 @@
-- Set basic inter process communication without waits (just with send/receive checks)
-- Start without a global variable. Then try it for the bonus if there is no other way of handling unicode

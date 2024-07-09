@@ -6,14 +6,12 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 21:43:13 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 22:51:33 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 23:00:13 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINITALK_H
 # define MINITALK_H
-
-# define _GNU_SOURCE
 
 # include "libft/include/libft.h"
 # include <unistd.h>
