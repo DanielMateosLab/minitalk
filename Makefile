@@ -12,6 +12,8 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 all: client server
 
+bonus: all
+
 client: $(C_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) -o $@ $(C_OBJS) -L$(LIBFT_DIR) -lft
 
