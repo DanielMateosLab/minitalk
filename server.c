@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 21:02:40 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:25:08 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,6 @@ void	set_up_sigaction(void)
 	sa.sa_mask = usr_sigset();
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-}
-
-char	*ft_expand_str(char *str, size_t len, size_t new_len)
-{
-	char	*temp;
-	size_t	i;
-
-	temp = ft_calloc(new_len, sizeof(char));
-	if (!temp)
-		return (ft_free((void **)str));
-	i = 0;
-	while (i < len)
-	{
-		temp[i] = str[i];
-		i++;
-	}
-	ft_free((void **)&str);
-	return (temp);
 }
 
 void	process_message(t_buffer *buff)
@@ -93,8 +75,7 @@ int	main(void)
 	sigset_t			usr_set;
 
 	usr_set = usr_sigset();
-	init_str_state(&buff);
-	if (!buff.ptr)
+	if (!init_str_state(&buff))
 		return (1);
 	g_message = (t_message *)malloc(sizeof(t_message));
 	if (!g_message)

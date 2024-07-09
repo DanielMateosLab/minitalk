@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 21:43:13 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 22:15:30 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:24:54 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ typedef struct s_c_state
 	size_t	bi;
 }	t_c_state;
 
-void		init_str_state(t_buffer *buff);
+char		*init_str_state(t_buffer *buff);
 void		print_str_and_reset_state(
 				t_buffer *buff, volatile t_message *g_message);
 void		send_confirmation(volatile t_message *g_message);
 sigset_t	usr_sigset(void);
 int			bit_to_signal(size_t si, size_t bi, char *str);
+char		*ft_expand_str(char *str, size_t len, size_t new_len);
 
 #endif
