@@ -1,34 +1,42 @@
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = client.c server.c
-OBJS = $(SRCS:.c=.o)
+C_SRCS = client.c client_utils.c
+C_OBJS = $(C_SRCS:.c=.o)
+
+S_SRCS = server.c server_utils.c
+S_OBJS = $(S_SRCS:.c=.o)
+
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
 all: client server
 
-client: client.o libft
-	$(CC) $(CFLAGS) -o $@ $< -Llibft -lft
+bonus: all
 
-server: server.o libft
-	$(CC) $(CFLAGS) -o $@ $< -Llibft -lft
+client: $(C_OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $@ $(C_OBJS) -L$(LIBFT_DIR) -lft
+
+server: $(S_OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $@ $(S_OBJS) -L$(LIBFT_DIR) -lft
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-libft:
-	make -C libft
+$(LIBFT):
+	make -C $(LIBFT_DIR)
 
 clean:
-	rm -f $(OBJS)
-	make -C libft clean
+	rm -f $(C_OBJS) $(S_OBJS)
+	make -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f client server
-	make -C libft fclean
+	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re
 
 deb: CFLAGS += -g3 -fsanitize=address
 deb: re

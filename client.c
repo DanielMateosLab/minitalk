@@ -6,19 +6,51 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/10 20:21:54 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:57:23 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-volatile int	received = 1;
+volatile sig_atomic_t	g_received = 1;
 
 void	handler(int signal)
 {
 	if (signal != SIGUSR1)
 		return ;
-	received = 1;
+	g_received = 1;
+}
+
+int	next_bit(size_t *si, size_t *bi, size_t len)
+{
+	(*bi)--;
+	if (*bi > 7)
+	{
+		*bi = 7;
+		(*si)++;
+	}
+	if (*si > len)
+		return (0);
+	return (1);
+}
+
+void	set_up_sigaction(struct sigaction *sa)
+{
+	sa->sa_handler = handler;
+	sigemptyset(&sa->sa_mask);
+	sigaction(SIGUSR1, sa, NULL);
+}
+
+int	send_confirmation(int pid, size_t si, size_t bi, char *str)
+{
+	g_received = 0;
+	while (!g_received)
+	{
+		if (kill(pid, bit_to_signal(si, bi, str)) == -1)
+			return (1);
+		usleep(300);
+	}
+	return (0);
 }
 
 int	main(int argc, char	**argv)
@@ -28,47 +60,22 @@ int	main(int argc, char	**argv)
 	char				*str;
 	size_t				bi;
 	size_t				si;
-	int					signal;
-	int					sleep_time;
 
 	if (argc != 3)
 		return (1);
 	str = argv[2];
 	si = 0;
 	bi = 8;
-	sa.sa_handler = handler;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGUSR1, &sa, NULL);
+	set_up_sigaction(&sa);
 	len = ft_strlen(str);
-	sleep_time = 1000;
 	while (1)
 	{
-		if (received)
+		if (g_received)
 		{
-			bi--;
-			if (bi > 7)
-			{
-				bi = 7;
-				si++;
-			}
-			if (si > len)
+			if (!next_bit(&si, &bi, len))
 				return (0);
-			if (str[si] >> bi & 1)
-			{
-				signal = SIGUSR2;
-			}
-			else
-			{
-				signal = SIGUSR1;
-			}
-			received = 0;
-			while (!received)
-			{
-				if (kill(ft_atoi(argv[1]), signal) == -1)
-					return (1);
-				sleep_time = (sleep_time * 2) % 300000;
-				usleep(sleep_time);
-			}
+			if (send_confirmation(ft_atoi(argv[1]), si, bi, str) == 1)
+				return (1);
 		}
 	}
 	return (0);
