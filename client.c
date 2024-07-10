@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/07 18:45:26 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:21:54 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,28 +50,22 @@ int	main(int argc, char	**argv)
 			{
 				bi = 7;
 				si++;
-				ft_printf("\n");
 			}
 			if (si > len)
 				return (0);
 			if (str[si] >> bi & 1)
 			{
-				ft_printf("1");
 				signal = SIGUSR2;
 			}
 			else
 			{
-				ft_printf("0");
 				signal = SIGUSR1;
 			}
 			received = 0;
 			while (!received)
 			{
 				if (kill(ft_atoi(argv[1]), signal) == -1)
-				{
-					ft_printf("Signal sending failed");
 					return (1);
-				}
 				sleep_time = (sleep_time * 2) % 300000;
 				usleep(sleep_time);
 			}

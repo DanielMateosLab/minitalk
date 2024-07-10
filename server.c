@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/07 18:55:14 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:23:18 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,17 @@ void	print_str_and_reset_state(t_buffer *buff)
 	write(1, buff->ptr, ft_strlen(buff->ptr));
 	ft_free((void **)&buff->ptr);
 	init_str_state(buff);
-	g_message->pending = 0;	
+	g_message->pending = 0;
 }
 
 void	save_bit(t_buffer *buff)
 {
 	if (g_message->bit)
 	{
-		ft_printf("1");
 		buff->ptr[buff->si] |= (1 << buff->bi);
 	}
 	else
 	{
-		ft_printf("0");
 		buff->ptr[buff->si] &= ~(1 << buff->bi);
 	}
 }
@@ -98,8 +96,7 @@ int	process_message(t_buffer *buff)
 	save_bit(buff);
 	if (buff->bi == 0)
 	{
-		ft_printf("\n");
-		if (!buff->ptr[buff->si]) // String end
+		if (!buff->ptr[buff->si])
 		{
 			print_str_and_reset_state(buff);
 			if (!buff->ptr)
@@ -116,14 +113,10 @@ int	process_message(t_buffer *buff)
 		buff->bi--;
 	if (buff->si == buff->len - 1)
 	{
-		ft_printf(
-			"buffer full, expanding it. Curr len: %s\n",
-			ft_itoa((int)buff->len));
 		buff->ptr = ft_expand_str(buff->ptr, buff->len, buff->len * 2);
 		if (!buff->ptr)
 			return (1);
 		buff->len *= 2;
-		ft_printf("buff new len: %s\n", ft_itoa((int)buff->len));
 	}
 	return (0);
 }
@@ -136,10 +129,11 @@ void	send_confirmation(void)
 	g_message->pending = 0;
 	while (!g_message->pending)
 	{
-		if (kill(g_message->sender, SIGUSR1) == -1)
-		{
-			ft_printf("Signal sending failed");
-		}
+		kill(g_message->sender, SIGUSR1);
+		// if (kill(g_message->sender, SIGUSR1) == -1)
+		// {
+		// 	ft_printf("Signal sending failed");
+		// }
 		sleep_time = (sleep_time * 2) % 300000;
 		usleep(sleep_time);
 	}
