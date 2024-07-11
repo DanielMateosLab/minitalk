@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:43 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 22:58:05 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:28:23 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@ void	handler(int signal)
 	g_received = 1;
 }
 
-void	set_up_sigaction(struct sigaction *sa)
+int	set_up_sigaction(struct sigaction *sa)
 {
 	sa->sa_handler = handler;
 	sigemptyset(&sa->sa_mask);
-	sigaddset(&sa->sa_mask, SIGUSR1);
-	sigaction(SIGUSR1, sa, NULL);
+	sa->sa_flags = 0;
+	if (sigaction(SIGUSR1, sa, NULL) == -1)
+		return (1);
+	return (0);
 }
 
 int	send_signal(char *pid, int signal)
@@ -60,7 +62,8 @@ int	main(int argc, char	**argv)
 
 	if (argc != 3)
 		return (1);
-	set_up_sigaction(&sa);
+	if (set_up_sigaction(&sa) == 1)
+		return (1);
 	str = argv[2];
 	si = 0;
 	bi = 8;

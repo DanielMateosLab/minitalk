@@ -6,12 +6,11 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 22:54:00 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:30:36 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include <signal.h>
 
 volatile t_message	*g_message = NULL;
 
@@ -29,7 +28,7 @@ void	action(int sig, siginfo_t *info, void *context)
 	return ;
 }
 
-void	set_up_sigaction(void)
+int	set_up_sigaction(void)
 {
 	struct sigaction	sa;
 
@@ -37,8 +36,13 @@ void	set_up_sigaction(void)
 	sa.sa_sigaction = action;
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_mask = usr_sigset();
-	sigaction(SIGUSR1, &sa, NULL);
-	sigaction(SIGUSR2, &sa, NULL);
+	if (sigaction(SIGUSR1, &sa, NULL) == -1
+		|| sigaction(SIGUSR2, &sa, NULL) == -1)
+	{
+		ft_printf("Error setting up signals\n");
+		return (1);
+	}
+	return (0);
 }
 
 void	process_message(t_buffer *buff)
@@ -86,7 +90,8 @@ int	main(void)
 	usr_set = usr_sigset();
 	if (!init_str_state(&buff) || !init_g_message())
 		return (1);
-	set_up_sigaction();
+	if (set_up_sigaction() == 1)
+		return (1);
 	ft_printf("%s\n", ft_itoa((int)getpid()));
 	while (1)
 	{

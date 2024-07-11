@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 20:20:00 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/09 22:51:20 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:33:26 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*ft_expand_str(char *str, size_t len, size_t new_len)
 
 	temp = ft_calloc(new_len, sizeof(char));
 	if (!temp)
-		return (ft_free((void **)str));
+		return (ft_free((void **)&str));
 	i = 0;
 	while (i < len)
 	{
