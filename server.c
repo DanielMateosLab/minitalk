@@ -6,7 +6,7 @@
 /*   By: damateos <damateos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 08:08:39 by damateos          #+#    #+#             */
-/*   Updated: 2024/07/11 20:30:36 by damateos         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:10:38 by damateos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,17 @@ volatile t_message	*init_g_message(void)
 
 int	main(void)
 {
-	t_buffer			buff;
-	sigset_t			usr_set;
+	t_buffer	buff;
+	sigset_t	usr_set;
+	char		*pid;
 
 	usr_set = usr_sigset();
 	if (!init_str_state(&buff) || !init_g_message())
 		return (1);
 	if (set_up_sigaction() == 1)
 		return (1);
-	ft_printf("%s\n", ft_itoa((int)getpid()));
+	ft_printf("%s\n", (pid = ft_itoa((int)getpid())));
+	ft_free((void **)&pid);
 	while (1)
 	{
 		if (g_message->pending)
